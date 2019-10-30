@@ -1,0 +1,31 @@
+
+public class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+            
+        int[] partialSum = new int[nums.length + 1];
+        partialSum[0] = 0;
+        for(int i = 1; i < partialSum.length; i++) {
+            partialSum[i] = partialSum[i-1] + nums[i-1];
+        }
+        
+        int min = nums.length + 1;
+        for(int i = 1; i < partialSum.length; i++) {
+            int lo = i;
+            int hi = partialSum.length - 1;
+            while(lo <= hi) {
+                int mid = lo + (hi - lo) / 2;
+                int subArraySum = partialSum[mid] - partialSum[i - 1];
+                if(subArraySum >= s) {
+                    min = Math.min(min, mid - i + 1);
+                    hi = mid - 1;
+                }else{
+                    lo = mid + 1;
+                }
+            }
+        }
+        
+        return min != nums.length + 1? min : 0;
+    }
+}
