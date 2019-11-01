@@ -35,6 +35,8 @@ class Solution {
     }
 }
 
+// time; O(n)
+// space: O(1)
 
 // method 2:
 class Solution {
