@@ -13,3 +13,7 @@ class Solution {
         return cur + 1;
     }
 }
+
+
+// time: O(n)
+// space: O(1)
