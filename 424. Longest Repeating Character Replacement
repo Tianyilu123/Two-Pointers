@@ -1,33 +1,22 @@
 
 class Solution {
     public int characterReplacement(String s, int k) {
-        if(s == null || s.length() == 0 || k < 0) return 0;
-        
-        int[] counter = new int[26];
-        int len = s.length(), start = 0, max = 0;
-        char maxChar = '\0';
-        
-        for(int i = 0; i<len; i++) {  // O(n)
-            char ch = s.charAt(i);
-            counter[ch - 'A']++;
-            if(maxChar == '\0' || counter[ch-'A'] > counter[maxChar - 'A']) {
-                maxChar = ch;
+        int[] count = new int[26];
+        int start = 0, res = 0;
+        int max = 0;
+        for(int i=0; i<s.length(); i++) {
+            count[s.charAt(i)-'A']++;
+            max = Math.max(max, count[s.charAt(i)-'A']);
+            while(i-start+1-max > k) {
+                count[s.charAt(start) - 'A']--;
+                start++;
             }
-            
-            while(i-start+1-counter[maxChar - 'A'] > k) { // shrink logic  // O(256) = O(1)
-                char startChar = s.charAt(start++);
-                counter[startChar - 'A']--;
-                
-                if(startChar == maxChar) {
-                    for(char cc = 'A'; cc <= 'Z'; cc++) {
-                        if(counter[cc-'A'] > counter[maxChar-'A']) {
-                            maxChar = cc;
-                        }
-                    }
-                }
-            }
-            max = Math.max(max, i-start+1);
+            res = Math.max(res, i-start+1);
         }
-        return max; // overall O(n)
+        return res;
     }
 }
+
+
+// time: O(n);
+// sapce: O(1);
