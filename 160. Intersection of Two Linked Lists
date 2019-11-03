@@ -9,3 +9,7 @@ public class Solution {
         return curA;
     }
 }
+
+
+// time: O(m+n)
+// space: O(1)
