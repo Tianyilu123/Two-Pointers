@@ -1,31 +1,47 @@
+// method 1: (O(n))
 
-public class Solution {
+class Solution {
     public int minSubArrayLen(int s, int[] nums) {
-        if(nums == null || nums.length == 0)
-            return 0;
-            
-        int[] partialSum = new int[nums.length + 1];
-        partialSum[0] = 0;
-        for(int i = 1; i < partialSum.length; i++) {
-            partialSum[i] = partialSum[i-1] + nums[i-1];
-        }
-        
-        int min = nums.length + 1;
-        for(int i = 1; i < partialSum.length; i++) {
-            int lo = i;
-            int hi = partialSum.length - 1;
-            while(lo <= hi) {
-                int mid = lo + (hi - lo) / 2;
-                int subArraySum = partialSum[mid] - partialSum[i - 1];
-                if(subArraySum >= s) {
-                    min = Math.min(min, mid - i + 1);
-                    hi = mid - 1;
-                }else{
-                    lo = mid + 1;
-                }
+        int res = Integer.MAX_VALUE;
+        int left = 0, sum = 0;
+        for(int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            while(left <= i && sum >= s) {
+                res = Math.min(res, i-left+1);
+                sum -= nums[left];
+                left++;
             }
         }
-        
-        return min != nums.length + 1? min : 0;
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+}
+
+
+// time: O(n);
+// space: O(1);
+
+// method 2: (Onlogn)
+public class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int i = 1, j = nums.length, min = 0;
+        while (i <= j) {
+            int mid = (i + j) / 2;
+            if (windowExist(mid, nums, s)) {
+                j = mid - 1;
+                min = mid;
+            } else i = mid + 1;
+        }
+        return min;
+    }
+
+
+    private boolean windowExist(int size, int[] nums, int s) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i >= size) sum -= nums[i - size];
+            sum += nums[i];
+            if (sum >= s) return true;
+        }
+        return false;
     }
 }
