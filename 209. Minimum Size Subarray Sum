@@ -47,3 +47,28 @@ public class Solution {
         return false;
     }
 }
+
+
+// method 3:
+public class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int[] prefixSum = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+        }
+        
+        int length = 0;
+        for (int i = 0; i < prefixSum.length - 1; i++) {
+            int right = Arrays.binarySearch(prefixSum, i, prefixSum.length, prefixSum[i] + s);
+            if (right < 0) {
+                right = - (right + 1);
+            }
+            if (right == prefixSum.length) {
+                continue;
+            }
+            length = length == 0 ? right - i : Math.min(length, right - i);
+        }
+        
+        return length;
+    }
+}
